@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name" translatable="false">Safe Notes</string>
+    <string name="enterYourFirst">Enter your fisrt name</string>
+    <string name="enterYourLast">Enter your last name</string>
+    <string name="nextPageFromStart">Start</string>
+    <string name="menuSettings">Settings</string>
+    <string name="menuAdd">Add</string>
+    <string name="writeSomething">Turn your creative thought into text</string>
+    <string name="welcomeText">Welcome To Safe Notes</string>
+    <string name="displayOptions">Display Options</string>
+    <string name="showAddNewButtonOption">Show add new button</string>
+    <string name="themeOption" translatable="false">Theme</string>
+    <string name="themeOptionValue" translatable="false">System</string>
+    <string name="accountOptions">Account Options</string>
+    <string name="chooseTheme">Choose theme</string>
+    <string name="radioButtonSystem">System</string>
+    <string name="radioButtonLight">Light</string>
+    <string name="radioButtonDark">Dark</string>
+    <string name="updateAccountOption">Update account info</string>
+    <string name="logoutAccountOption">Logout</string>
+</resources>

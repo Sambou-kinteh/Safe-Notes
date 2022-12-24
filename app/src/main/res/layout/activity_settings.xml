@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SettingsActivity">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/back_from_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="#FFF"
+        android:src="@drawable/ic_back_from_settings"
+        app:rippleColor="#bcc0c2"
+        app:elevation="0dp"
+        app:fabCustomSize="45dp"
+        android:outlineAmbientShadowColor="@color/white" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/back_from_settings"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="22dp"
+        android:layout_toEndOf="@+id/back_from_settings"
+        android:text="@string/menuSettings"
+        android:textSize="22sp"/>
+
+    <TextView
+        android:id="@+id/displayOptions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/back_from_settings"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/displayOptions"
+        android:textColor="#0076a8"/>
+
+    <TextView
+        android:id="@+id/showAddNewButtonOption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/displayOptions"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
+        android:text="@string/showAddNewButtonOption"
+        android:textSize="19sp"/>
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/showAddNewButtonSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/displayOptions"
+        android:layout_alignBaseline="@+id/showAddNewButtonOption"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="5dp"
+        android:layout_toEndOf="@+id/showAddNewButtonOption"
+        android:checked="true"
+        />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/themeOptionLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/showAddNewButtonOption"
+        android:layout_alignEnd="@+id/showAddNewButtonSwitch"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="5dp"
+        android:fadingEdge="horizontal"
+        app:cardBackgroundColor="@color/white"
+        app:cardElevation="0dp"
+        >
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/themeOption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/themeOption"
+                android:textSize="19sp"/>
+
+            <TextView
+                android:id="@+id/themeOptionValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/themeOption"
+                android:layout_alignParentEnd="true"
+                android:text="@string/themeOptionValue"
+                android:textSize="19sp"
+                />
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/accountOptions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/themeOptionLayout"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/accountOptions"
+        android:textColor="#0076a8"/>
+
+    <TextView
+        android:id="@+id/updateAccountOption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/accountOptions"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
+        android:text="@string/updateAccountOption"
+        android:textSize="19sp"/>
+
+    <Button
+        android:id="@+id/logoutAccountOptionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/updateAccountOption"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
+        android:text="@string/logoutAccountOption"
+        android:textSize="19sp" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/themeOptionCard"
+        android:layout_centerInParent="true"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="20dp"
+        android:layout_margin="60dp"
+        android:visibility="gone">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/chooseTheme"
+                android:textSize="20sp"
+                android:id="@+id/themeOptionCardText"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="10dp"/>
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/themeOptionCardText"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="15dp"
+                android:id="@+id/themeOptionCardRadiogroup">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/radioButtonSystem"
+                    android:textSize="18sp"
+                    android:id="@+id/radioButtonSystem"/>
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/radioButtonLight"
+                    android:textSize="18sp"
+                    android:id="@+id/radioButtonLight"/>
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/radioButtonDark"
+                    android:textSize="18sp"
+                    android:id="@+id/radioButtonDark"/>
+
+
+
+            </RadioGroup>
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+</RelativeLayout>

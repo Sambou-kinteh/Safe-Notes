@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="enterYourFirst">Gebe dein Vorname ein</string>
+    <string name="enterYourLast">Gebe dein Nachname ein</string>
+    <string name="nextPageFromStart">Starten</string>
+    <string name="menuSettings">Einstellungen</string>
+    <string name="menuAdd">Neue</string>
+    <string name="writeSomething">Wandele deine kreativen Gedanken zum Text</string>
+    <string name="welcomeText">Willkommen zu Safe Notes</string>
+    <string name="displayOptions">Display Optionen</string>
+    <string name="showAddNewButtonOption">Zeige die add new Taste</string>
+    <string name="accountOptions">Konto</string>
+    <string name="chooseTheme">Wahle theme</string>
+    <string name="radioButtonSystem">System</string>
+    <string name="radioButtonLight">Hell</string>
+    <string name="radioButtonDark">Dunkel</string>
+    <string name="updateAccountOption">Aktualisiere dein Kontoinfo</string>
+    <string name="logoutAccountOption">Ausloggen</string>
+</resources>
