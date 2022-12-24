@@ -5,7 +5,6 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,7 +17,7 @@ import com.samski.safenotes.data.DataHandler;
 import com.samski.safenotes.settings.SettingsModel;
 
 import java.util.HashMap;
-import java.util.Set;
+import java.util.Objects;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -40,6 +39,7 @@ public class SettingsActivity extends AppCompatActivity {
     CardView themeOptionCard;
     RadioGroup themeOptionCardRadiogroup;
     DataHandler handler;
+    SettingsModel settings;
 
 
     @Override
@@ -53,6 +53,7 @@ public class SettingsActivity extends AppCompatActivity {
         themeOptionValue = findViewById(R.id.themeOptionValue);
         themeOptionCardRadiogroup = findViewById(R.id.themeOptionCardRadiogroup);
         handler = new DataHandler(this, DataHandler.USER_SETTINGS_DATA_SHAREDPREF_KEY, SettingsModel.class);
+        settings = handler.readPreferences();
 
         //if btnOnClick, take user back
         btnBack.setOnClickListener((view) -> {
@@ -82,17 +83,19 @@ public class SettingsActivity extends AppCompatActivity {
             switch (i) {
 
                 case system:
-//                    TODO: change app theme
+                    this.setTheme(R.style.NoActionBar);
                     themeOptionValue.setText(R.string.radioButtonSystem);
                     settings.getDisplayOptions().replace(KEY_DISPLAY_OPTION_THEME, VALUE_DISPLAY_OPTION_THEME_DEFAULT);
                     break;
                 case light:
 //                    TODO: change app theme
+                    this.setTheme(R.style.NoActionBar);
                     themeOptionValue.setText(R.string.radioButtonLight);
                     settings.getDisplayOptions().replace(KEY_DISPLAY_OPTION_THEME, VALUE_DISPLAY_OPTION_THEME_LIGHT);
                     break;
                 case dark:
 //                    TODO: change app theme
+                    this.setTheme(R.style.NoActionBar);
                     themeOptionValue.setText(R.string.radioButtonDark);
                     settings.getDisplayOptions().replace(KEY_DISPLAY_OPTION_THEME, VALUE_DISPLAY_OPTION_THEME_DARK);
                     break;
@@ -102,6 +105,10 @@ public class SettingsActivity extends AppCompatActivity {
 
             handler.writeToPreferences(settings);
         });
+
+//        check switch if user switched off and on if user switched on
+        showAddButton.setChecked(Objects.equals(settings.getDisplayOptions().get(KEY_DISPLAY_OPTION_SHOWADDBUTTON),
+                SettingsActivity.YES));
 
     }
 
@@ -169,15 +176,15 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
 
         if (themeOptionCard.getVisibility() == View.VISIBLE) {
 
             themeOptionCard.setVisibility(View.GONE);
         }else {
 
-            Intent intent = new Intent(this, MainActivityAfterLogin.class);
-            startActivity(intent);
+            super.onBackPressed();
+//            Intent intent = new Intent(this, MainActivityAfterLogin.class);
+//            startActivity(intent);
         }
     }
 

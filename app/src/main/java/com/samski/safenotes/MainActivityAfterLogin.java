@@ -15,6 +15,7 @@ import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -24,8 +25,10 @@ import com.samski.safenotes.data.DataHandler;
 import com.samski.safenotes.itemlist.ItemsAdapter;
 import com.samski.safenotes.itemlist.ItemsModel;
 import com.samski.safenotes.login.DataModel;
+import com.samski.safenotes.settings.SettingsModel;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class MainActivityAfterLogin extends AppCompatActivity {
@@ -48,8 +51,13 @@ public class MainActivityAfterLogin extends AppCompatActivity {
         ArrayList<DataModel> items = new DataHandler(this, DataHandler.USER_ITEMS_DATA_SHAREDPREF_KEY,
                 DataHandler.ITEM_ARRAYLIST_TYPE).readPreferences();
 
+        SettingsModel settings = new DataHandler(this, DataHandler.USER_SETTINGS_DATA_SHAREDPREF_KEY,
+                SettingsModel.class).readPreferences();
+//        load user settings to view
+
         if (items.size() != 0) {
 
+//            load data to user if user already has items
             loadDataToUser(DONT_ADD_ITEM_FLAG);
         }
 
@@ -59,6 +67,16 @@ public class MainActivityAfterLogin extends AppCompatActivity {
             loadDataToUser(ADD_ITEM_FLAG);
 //            TODO: TAKE USER TO EDITOR
         });
+
+        if (Objects.equals(settings.getDisplayOptions().get(SettingsActivity.KEY_DISPLAY_OPTION_SHOWADDBUTTON),
+                SettingsActivity.NO) && Objects.equals(floatingActionButton.getVisibility(), View.VISIBLE)) {
+
+            floatingActionButton.setVisibility(View.INVISIBLE);
+        } else if (Objects.equals(settings.getDisplayOptions().get(SettingsActivity.KEY_DISPLAY_OPTION_SHOWADDBUTTON),
+                SettingsActivity.YES) && Objects.equals(floatingActionButton.getVisibility(), View.INVISIBLE)) {
+
+            floatingActionButton.setVisibility(View.VISIBLE);
+        }
 
     }
 
