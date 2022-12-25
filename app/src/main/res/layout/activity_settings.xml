@@ -131,6 +131,36 @@
         android:text="@string/logoutAccountOption"
         android:textSize="19sp" />
 
+    <Button
+        android:id="@+id/deleteAllBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/logoutAccountOptionButton"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
+        android:text="@string/deleteAllBtn"
+        android:textSize="19sp" />
+
+    <Button
+        android:id="@+id/deleteLoginData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/deleteAllBtn"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
+        android:text="@string/deleteLoginBtn"
+        android:textSize="19sp" />
+
+    <Button
+        android:id="@+id/deleteItems"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/deleteLoginData"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
+        android:text="@string/deleteItems"
+        android:textSize="19sp" />
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

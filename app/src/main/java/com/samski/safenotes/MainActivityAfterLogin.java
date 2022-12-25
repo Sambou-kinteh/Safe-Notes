@@ -5,9 +5,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,9 +42,11 @@ public class MainActivityAfterLogin extends AppCompatActivity {
 
     private RecyclerView itemsView;
     private DataHandler handler;
-    ItemsAdapter adapter;
+    private ItemsAdapter adapter;
+    private CardView itemCard;
     public static FloatingActionButton floatingActionButton;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,11 +65,14 @@ public class MainActivityAfterLogin extends AppCompatActivity {
             loadDataToUser(DONT_ADD_ITEM_FLAG);
         }
 
+        itemCard = findViewById(R.id.item);
         floatingActionButton = findViewById(R.id.floatingButtonAdd);
         floatingActionButton.setOnClickListener((view) ->{
 
-            loadDataToUser(ADD_ITEM_FLAG);
-//            TODO: TAKE USER TO EDITOR
+            int itemSize = loadDataToUser(ADD_ITEM_FLAG);
+            ItemsAdapter.currentItemPosition = itemSize-1;
+            startActivity(new Intent(this, EditorActivity.class));
+
         });
 
         if (Objects.equals(settings.getDisplayOptions().get(SettingsActivity.KEY_DISPLAY_OPTION_SHOWADDBUTTON),
@@ -96,25 +103,28 @@ public class MainActivityAfterLogin extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
+        final int settingsCase = R.id.settings;
+        final int addCase = R.id.add;
         switch (item.getItemId()) {
 
-            case R.id.settings:
-                Intent intent = new Intent(MainActivityAfterLogin.this, SettingsActivity.class);
-                startActivity(intent);
+            case settingsCase:
+                startActivity(new Intent(MainActivityAfterLogin.this, SettingsActivity.class));
                 return true;
-            case R.id.add:
-                loadDataToUser(ADD_ITEM_FLAG);
-//                TODO: TAKE USER TO EDITOR
+            case addCase:
+                int itemSize = loadDataToUser(ADD_ITEM_FLAG);
+                ItemsAdapter.currentItemPosition = itemSize-1;
+                startActivity(new Intent(this, EditorActivity.class));
+                return true;
 
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    public void loadDataToUser(String flag) {
+//    return current size of items
+    public int loadDataToUser(String flag) {
 
         itemsView = findViewById(R.id.itemsList);
-//        TODO: CAN ALSO USE NEW CARDVIEW AS AN ALTERNATIVE TO RECYCLERVIEW
 
         handler = new DataHandler(MainActivityAfterLogin.this, DataHandler.USER_ITEMS_DATA_SHAREDPREF_KEY, DataHandler.ITEM_ARRAYLIST_TYPE);
         ArrayList<ItemsModel> items = handler.readPreferences();
@@ -124,17 +134,20 @@ public class MainActivityAfterLogin extends AppCompatActivity {
 
         adapter = new ItemsAdapter(MainActivityAfterLogin.this);
         System.out.println(items.size() > 1);
+
         if (flag.equals(ADD_ITEM_FLAG)) {
 
             items.add(new ItemsModel("", 0));
-        }
-        adapter.setItems(items);
+            adapter.setItems(items, ItemsAdapter.FLAG_SET_ONE);
+
+        }else adapter.setItems(items, ItemsAdapter.FLAG_SET_RANGE);
+
 //        dataset could be initialised alternatively with adapter.InitializeItemPref()
         itemsView.setAdapter(adapter);
         itemsView.setLayoutManager(new GridLayoutManager(MainActivityAfterLogin.this, 2));
         handler.writeToPreferences(items);
 
-//        CardView card = new CardView(MainActivityAfterLogin.this);
+        return items.size();
 
     }
 

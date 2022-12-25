@@ -4,16 +4,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.cardview.widget.CardView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.samski.safenotes.data.DataHandler;
+import com.samski.safenotes.itemlist.ItemsModel;
+import com.samski.safenotes.login.DataModel;
 import com.samski.safenotes.settings.SettingsModel;
 
 import java.util.HashMap;
@@ -26,9 +31,9 @@ public class SettingsActivity extends AppCompatActivity {
     public static final String FLAG_ACCOUNT_OPTIONS_ONLY = "accountOption";
     public static final String KEY_DISPLAY_OPTION_SHOWADDBUTTON = "showAddButton";
     public static final String KEY_DISPLAY_OPTION_THEME = "theme";
-    public static final String VALUE_DISPLAY_OPTION_THEME_DEFAULT = "system";
-    public static final String VALUE_DISPLAY_OPTION_THEME_DARK = "dark";
-    public static final String VALUE_DISPLAY_OPTION_THEME_LIGHT = "light";
+    public static final String VALUE_DISPLAY_OPTION_THEME_DEFAULT = "System";
+    public static final String VALUE_DISPLAY_OPTION_THEME_DARK = "Dark";
+    public static final String VALUE_DISPLAY_OPTION_THEME_LIGHT = "Light";
     public static final String YES = "yes";
     public static final String NO = "no";
 
@@ -40,8 +45,10 @@ public class SettingsActivity extends AppCompatActivity {
     RadioGroup themeOptionCardRadiogroup;
     DataHandler handler;
     SettingsModel settings;
+    Button deleteAllBtn, deleteLoginData, deleteItems;
 
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +59,10 @@ public class SettingsActivity extends AppCompatActivity {
         themeOption = findViewById(R.id.themeOptionLayout);
         themeOptionValue = findViewById(R.id.themeOptionValue);
         themeOptionCardRadiogroup = findViewById(R.id.themeOptionCardRadiogroup);
+        themeOptionCard = findViewById(R.id.themeOptionCard);
+        deleteAllBtn = findViewById(R.id.deleteAllBtn);
+        deleteLoginData = findViewById(R.id.deleteLoginData);
+        deleteItems = findViewById(R.id.deleteItems);
         handler = new DataHandler(this, DataHandler.USER_SETTINGS_DATA_SHAREDPREF_KEY, SettingsModel.class);
         settings = handler.readPreferences();
 
@@ -83,19 +94,19 @@ public class SettingsActivity extends AppCompatActivity {
             switch (i) {
 
                 case system:
-                    this.setTheme(R.style.NoActionBar);
+//                    this.setTheme(R.style.NoActionBar);
                     themeOptionValue.setText(R.string.radioButtonSystem);
                     settings.getDisplayOptions().replace(KEY_DISPLAY_OPTION_THEME, VALUE_DISPLAY_OPTION_THEME_DEFAULT);
                     break;
                 case light:
 //                    TODO: change app theme
-                    this.setTheme(R.style.NoActionBar);
+//                    this.setTheme(R.style.NoActionBar);
                     themeOptionValue.setText(R.string.radioButtonLight);
                     settings.getDisplayOptions().replace(KEY_DISPLAY_OPTION_THEME, VALUE_DISPLAY_OPTION_THEME_LIGHT);
                     break;
                 case dark:
 //                    TODO: change app theme
-                    this.setTheme(R.style.NoActionBar);
+//                    this.setTheme(R.style.NoActionBar);
                     themeOptionValue.setText(R.string.radioButtonDark);
                     settings.getDisplayOptions().replace(KEY_DISPLAY_OPTION_THEME, VALUE_DISPLAY_OPTION_THEME_DARK);
                     break;
@@ -106,9 +117,25 @@ public class SettingsActivity extends AppCompatActivity {
             handler.writeToPreferences(settings);
         });
 
-//        check switch if user switched off and on if user switched on
-        showAddButton.setChecked(Objects.equals(settings.getDisplayOptions().get(KEY_DISPLAY_OPTION_SHOWADDBUTTON),
-                SettingsActivity.YES));
+        deleteAllBtn.setOnClickListener(view -> {
+
+            handler.deleteAllData();
+        });
+
+        deleteLoginData.setOnClickListener(view -> {
+
+            DataHandler handler = new DataHandler(this, DataHandler.USER_DATA_LOGIN_SHAREDPREF_KEY, DataModel.class);
+            handler.deleteAllData();
+        });
+
+        deleteItems.setOnClickListener(view -> {
+
+            DataHandler handler = new DataHandler(this, DataHandler.USER_ITEMS_DATA_SHAREDPREF_KEY, DataHandler.ITEM_ARRAYLIST_TYPE);
+            handler.deleteAllData();
+        });
+
+//        set the values to the user pref
+        updateSettings();
 
     }
 
@@ -169,7 +196,6 @@ public class SettingsActivity extends AppCompatActivity {
 
     public void showThemeOptionCard() {
 
-        themeOptionCard = findViewById(R.id.themeOptionCard);
         themeOptionCard.setVisibility(View.VISIBLE);
 
     }
@@ -177,26 +203,33 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-        if (themeOptionCard.getVisibility() == View.VISIBLE) {
-
-            themeOptionCard.setVisibility(View.GONE);
-        }else {
+        if (!(themeOptionCard.getVisibility() == View.VISIBLE)) {
 
             super.onBackPressed();
-//            Intent intent = new Intent(this, MainActivityAfterLogin.class);
-//            startActivity(intent);
+        }else {
+            themeOptionCard.setVisibility(View.GONE);
+
         }
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-        System.out.println(event.getAction());
         if (themeOptionCard.getVisibility() == View.VISIBLE) {
 
             themeOptionCard.setVisibility(View.GONE);
-            return true;
+//            return true;
+            return false;
         }
         return super.onTouchEvent(event);
+    }
+
+    public void updateSettings() {
+
+        //        check switch if user switched off and on if user switched on
+        showAddButton.setChecked(Objects.equals(settings.getDisplayOptions().get(KEY_DISPLAY_OPTION_SHOWADDBUTTON),
+                SettingsActivity.YES));
+
+        themeOptionValue.setText(settings.getDisplayOptions().get(KEY_DISPLAY_OPTION_THEME));
     }
 }

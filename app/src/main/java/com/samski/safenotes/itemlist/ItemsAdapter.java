@@ -1,15 +1,19 @@
 package com.samski.safenotes.itemlist;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.samski.safenotes.EditorActivity;
+import com.samski.safenotes.MainActivityAfterLogin;
 import com.samski.safenotes.R;
 import com.samski.safenotes.data.DataHandler;
 import com.samski.safenotes.login.DataModel;
@@ -22,11 +26,16 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
 
     private DataHandler handler;
     private Context context;
-    private ArrayList<ItemsModel> items = new ArrayList<>();
+    public static ArrayList<ItemsModel> items = new ArrayList<>();
+    private int TEXTLENGTHLIMIT = 250;
+    public static final String FLAG_SET_ONE = "set one";
+    public static final String FLAG_SET_RANGE = "set range";
+    public static int currentItemPosition;
 
     public ItemsAdapter(Context context) {
 
         this.context = context;
+        handler = new DataHandler(this.context, DataHandler.USER_ITEMS_DATA_SHAREDPREF_KEY, DataHandler.ITEM_ARRAYLIST_TYPE);
     }
 
     @NonNull
@@ -46,10 +55,26 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
 //        InitializeItemPref();
-        holder.userTxt.setText(items.get(position).getUserText());
+        String userTxt = items.get(position).getUserText();
+
+        holder.userTxt.setText(userTxt.length() <= TEXTLENGTHLIMIT ? userTxt :
+                userTxt.substring(0, TEXTLENGTHLIMIT));
+
+        holder.item.setOnLongClickListener(view -> {
+
+            deleteItem(position);
+            return false;
+        });
+
+        holder.item.setOnClickListener(view -> {
+
+//            take user to editor
+            currentItemPosition = holder.getAdapterPosition();
+            context.startActivity(new Intent(context, EditorActivity.class));
+        });
 //        holder.item.setCardBackgroundColor(items.get(position).getPreferedThemeColor());
 
-//        TODO: CREATE ONCLICKLISTENER WHEN USER CLICKS ON A CARD, TO TEXTEDITOR
+//        TODO: CREATE ONCLICK-LISTENER WHEN USER CLICKS ON A CARD, TO TEXTEDITOR
     }
 
     @Override
@@ -58,17 +83,21 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
         return items.size();
     }
 
-    public void setItems(ArrayList<ItemsModel> items) {
+    public void setItems(ArrayList<ItemsModel> items, String flag) {
 
         this.items = items;
-        notifyDataSetChanged();
+//        notifyDataSetChanged();
+        if (flag.equals(FLAG_SET_ONE)) {
+
+        notifyItemInserted(items.size() - 1);
+        }
+        else notifyItemRangeInserted(0, items.size());
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-
-        private CardView item;
         private TextView userTxt;
+        private CardView item;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -81,7 +110,6 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
     public boolean InitializeItemPref() {
 
         try {
-            handler = new DataHandler(this.context, DataHandler.USER_ITEMS_DATA_SHAREDPREF_KEY, DataHandler.ITEM_ARRAYLIST_TYPE);
 //            TODO: CHECK IF ANY DATA PRESENT, IF YES ADD TO, IF NO INITIALIZE
             handler.writeToPreferences(items);
             return true;
@@ -90,4 +118,15 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
             return false;
         }
     }
+
+    public void deleteItem(int position) {
+
+        items.remove(position);
+        handler.writeToPreferences(items);
+        Toast.makeText(context, "Deleted at position " + position, Toast.LENGTH_SHORT).show();
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, items.size());
+//        notifyDataSetChanged();
+    }
+
 }

@@ -16,4 +16,7 @@
     <string name="radioButtonDark">Dunkel</string>
     <string name="updateAccountOption">Aktualisiere dein Kontoinfo</string>
     <string name="logoutAccountOption">Ausloggen</string>
+    <string name="deleteAllBtn">Alle Daten Löschen</string>
+    <string name="deleteLoginBtn">Login Daten Löschen</string>
+    <string name="deleteItems">Lösche Items</string>
 </resources>

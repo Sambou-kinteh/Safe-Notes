@@ -22,6 +22,7 @@ public class DataHandler {
     Context context;
     SharedPreferences sharedPreferences;
     Type type;
+    SharedPreferences.Editor editor;
 
     public DataHandler(Context context, String userPrefKey, Type type) {
 
@@ -29,6 +30,7 @@ public class DataHandler {
         this.context = context;
         this.type = type;
         sharedPreferences = context.getSharedPreferences(userPrefKey, Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
     }
 
     public <AnyType> AnyType readPreferences() {
@@ -56,12 +58,8 @@ public class DataHandler {
 
         try {
 
-            SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(userPrefKey, gsonObj.toJson(userData));
             editor.apply();
-
-
-            System.out.println(sharedPreferences.getAll());
 
             return true;
         } catch (Exception e) {
@@ -76,7 +74,6 @@ public class DataHandler {
 
         try {
 
-            SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(userPrefKey, gsonObj.toJson(newData));
             editor.apply();
             return true;
@@ -85,5 +82,24 @@ public class DataHandler {
             return false;
         }
 
+    }
+
+    public boolean deleteAllData() {
+
+//        only in testing phase
+        try {
+            editor.clear();
+            editor.apply();
+
+            return true;
+        } catch (Exception e) {
+
+            return false;
+        }
+    }
+
+    public void deleteItemFromPref(int position, ArrayList<ItemsModel> items) {
+
+        writeToPreferences(items);
     }
 }

@@ -18,4 +18,7 @@
     <string name="radioButtonDark">Dark</string>
     <string name="updateAccountOption">Update account info</string>
     <string name="logoutAccountOption">Logout</string>
+    <string name="deleteAllBtn">Delete All</string>
+    <string name="deleteLoginBtn">Delete Login data</string>
+    <string name="deleteItems">Delete Items</string>
 </resources>
