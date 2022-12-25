@@ -27,7 +27,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
     private DataHandler handler;
     private Context context;
     public static ArrayList<ItemsModel> items = new ArrayList<>();
-    private int TEXTLENGTHLIMIT = 250;
+    private int TEXTLENGTHLIMIT = 400;
     public static final String FLAG_SET_ONE = "set one";
     public static final String FLAG_SET_RANGE = "set range";
     public static int currentItemPosition;
@@ -63,7 +63,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
         holder.item.setOnLongClickListener(view -> {
 
             deleteItem(position);
-            return false;
+            return true;
         });
 
         holder.item.setOnClickListener(view -> {
@@ -72,14 +72,13 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
             currentItemPosition = holder.getAdapterPosition();
             context.startActivity(new Intent(context, EditorActivity.class));
         });
-//        holder.item.setCardBackgroundColor(items.get(position).getPreferedThemeColor());
 
-//        TODO: CREATE ONCLICK-LISTENER WHEN USER CLICKS ON A CARD, TO TEXTEDITOR
+        holder.item.setCardBackgroundColor(items.get(position).getPreferedThemeColor());
+
     }
 
     @Override
     public int getItemCount() {
-//        TODO: count of items should be done through the sharedprefrence file userItemPref with key i = N
         return items.size();
     }
 
@@ -89,9 +88,8 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
 //        notifyDataSetChanged();
         if (flag.equals(FLAG_SET_ONE)) {
 
-        notifyItemInserted(items.size() - 1);
-        }
-        else notifyItemRangeInserted(0, items.size());
+            notifyItemInserted(items.size() - 1);
+        } else notifyItemRangeInserted(0, items.size());
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

@@ -18,6 +18,7 @@
         tools:targetApi="31">
         <activity
             android:name=".EditorActivity"
+            android:theme="@style/Theme.SafeNotes.Light"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -26,13 +27,14 @@
         <activity
             android:name=".SettingsActivity"
             android:exported="false"
-            android:theme="@style/NoActionBar">
+            android:theme="@style/Theme.SafeNotes.Light.NoActionbar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".MainActivityAfterLogin"
+            android:theme="@style/Theme.SafeNotes.Light"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

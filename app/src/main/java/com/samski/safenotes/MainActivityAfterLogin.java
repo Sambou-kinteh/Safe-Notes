@@ -6,8 +6,10 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -19,6 +21,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.appbar.MaterialToolbar;
@@ -43,29 +47,55 @@ public class MainActivityAfterLogin extends AppCompatActivity {
     private RecyclerView itemsView;
     private DataHandler handler;
     private ItemsAdapter adapter;
-    private CardView itemCard;
+    private TextView addNewTxt;
     public static FloatingActionButton floatingActionButton;
+    public boolean isDark;
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_after_login);
 
-        ArrayList<DataModel> items = new DataHandler(this, DataHandler.USER_ITEMS_DATA_SHAREDPREF_KEY,
-                DataHandler.ITEM_ARRAYLIST_TYPE).readPreferences();
+        handler = new DataHandler(MainActivityAfterLogin.this, DataHandler.USER_ITEMS_DATA_SHAREDPREF_KEY, DataHandler.ITEM_ARRAYLIST_TYPE);
+
+        ArrayList<DataModel> items = handler.readPreferences();
 
         SettingsModel settings = new DataHandler(this, DataHandler.USER_SETTINGS_DATA_SHAREDPREF_KEY,
                 SettingsModel.class).readPreferences();
-//        load user settings to view
 
+//        set user theme pref as activity theme
+        switch (Objects.requireNonNull(settings.getDisplayOptions().get(SettingsActivity.KEY_DISPLAY_OPTION_THEME))) {
+
+            case SettingsActivity.VALUE_DISPLAY_OPTION_THEME_LIGHT:
+                this.setTheme(R.style.Theme_SafeNotes_Light);
+                isDark = false;
+//                findViewById(R.id.layoutActivityMain).setBackgroundColor(getResources().getColor(R.color.white, this.getTheme()));
+                break;
+
+            case SettingsActivity.VALUE_DISPLAY_OPTION_THEME_DARK:
+                this.setTheme(R.style.Theme_SafeNotes_Dark);
+                isDark = true;
+//                findViewById(R.id.layoutActivityMain).setBackgroundColor(getResources().getColor(R.color.themeDarkVariant1, this.getTheme()));
+                break;
+
+            case SettingsActivity.VALUE_DISPLAY_OPTION_THEME_DEFAULT:
+                break;
+        }
+
+//        create and set content view
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main_after_login);
+
+//        load user settings to view
+        addNewTxt = findViewById(R.id.createAnItemText);
         if (items.size() != 0) {
 
 //            load data to user if user already has items
             loadDataToUser(DONT_ADD_ITEM_FLAG);
-        }
+            if (Objects.equals(addNewTxt.getVisibility(), View.VISIBLE)) {
+                addNewTxt.setVisibility(View.GONE);
+            }
+        }else addNewTxt.setVisibility(View.VISIBLE);
 
-        itemCard = findViewById(R.id.item);
         floatingActionButton = findViewById(R.id.floatingButtonAdd);
         floatingActionButton.setOnClickListener((view) ->{
 
@@ -85,6 +115,9 @@ public class MainActivityAfterLogin extends AppCompatActivity {
             floatingActionButton.setVisibility(View.VISIBLE);
         }
 
+        //share context with settingsactivity
+        SettingsActivity.getMainActivityAfterLoginContext(this);
+
     }
 
     @Override
@@ -96,7 +129,11 @@ public class MainActivityAfterLogin extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.main_menu, menu);
+        if (isDark) {
+            menuInflater.inflate(R.menu.main_menu_dark, menu);
+
+        }else menuInflater.inflate(R.menu.main_menu, menu);
+
         return true;
     }
 
@@ -125,26 +162,24 @@ public class MainActivityAfterLogin extends AppCompatActivity {
     public int loadDataToUser(String flag) {
 
         itemsView = findViewById(R.id.itemsList);
-
-        handler = new DataHandler(MainActivityAfterLogin.this, DataHandler.USER_ITEMS_DATA_SHAREDPREF_KEY, DataHandler.ITEM_ARRAYLIST_TYPE);
         ArrayList<ItemsModel> items = handler.readPreferences();
-        System.out.println(items);
 
         correctResolutionComplexity();
 
         adapter = new ItemsAdapter(MainActivityAfterLogin.this);
-        System.out.println(items.size() > 1);
 
         if (flag.equals(ADD_ITEM_FLAG)) {
 
-            items.add(new ItemsModel("", 0));
+            items.add(isDark ? new ItemsModel("", getResources().getColor(R.color.themeDarkVariant1, this.getTheme())) :
+                    new ItemsModel("", getResources().getColor(R.color.white, this.getTheme())));
+
             adapter.setItems(items, ItemsAdapter.FLAG_SET_ONE);
 
         }else adapter.setItems(items, ItemsAdapter.FLAG_SET_RANGE);
 
 //        dataset could be initialised alternatively with adapter.InitializeItemPref()
         itemsView.setAdapter(adapter);
-        itemsView.setLayoutManager(new GridLayoutManager(MainActivityAfterLogin.this, 2));
+        itemsView.setLayoutManager(new StaggeredGridLayoutManager(2, RecyclerView.VERTICAL));
         handler.writeToPreferences(items);
 
         return items.size();

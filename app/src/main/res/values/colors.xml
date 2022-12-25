@@ -8,8 +8,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="appTheme">#454c4f</color>
-    <color name="appShadow">#043D39</color>
+    <color name="appShadow">#FF000000</color>
     <color name="appCardStart">#0FF4C6</color>
     <color name="appTextStart">#FFF</color>
+    <color name="themeDarkVariant1">#232624</color>
 
 </resources>

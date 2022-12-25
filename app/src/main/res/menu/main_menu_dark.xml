@@ -7,12 +7,12 @@
         android:title="@string/menuAdd"
         app:showAsAction="ifRoom"
         android:id="@+id/add"
-        android:icon="@drawable/ic_add_light_theme"/>
+        android:icon="@drawable/ic_add_dark_theme"/>
 
     <item
         android:title="@string/menuSettings"
         android:id="@+id/settings"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_settings_light_theme"/>
+        android:icon="@drawable/ic_settings_dark_theme"/>
 
 </menu>

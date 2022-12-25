@@ -5,6 +5,7 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.cardview.widget.CardView;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -13,6 +14,7 @@ import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -36,6 +38,7 @@ public class SettingsActivity extends AppCompatActivity {
     public static final String VALUE_DISPLAY_OPTION_THEME_LIGHT = "Light";
     public static final String YES = "yes";
     public static final String NO = "no";
+    public static Context context;
 
     FloatingActionButton btnBack;
     SwitchCompat showAddButton;
@@ -46,6 +49,7 @@ public class SettingsActivity extends AppCompatActivity {
     DataHandler handler;
     SettingsModel settings;
     Button deleteAllBtn, deleteLoginData, deleteItems;
+    RelativeLayout relativeLayoutSettings;
 
 
     @SuppressLint("MissingInflatedId")
@@ -63,6 +67,7 @@ public class SettingsActivity extends AppCompatActivity {
         deleteAllBtn = findViewById(R.id.deleteAllBtn);
         deleteLoginData = findViewById(R.id.deleteLoginData);
         deleteItems = findViewById(R.id.deleteItems);
+        relativeLayoutSettings = findViewById(R.id.settingsRelativeLayout);
         handler = new DataHandler(this, DataHandler.USER_SETTINGS_DATA_SHAREDPREF_KEY, SettingsModel.class);
         settings = handler.readPreferences();
 
@@ -94,19 +99,21 @@ public class SettingsActivity extends AppCompatActivity {
             switch (i) {
 
                 case system:
-//                    this.setTheme(R.style.NoActionBar);
+                    context.setTheme(R.style.Theme_SafeNotes_Dark);
                     themeOptionValue.setText(R.string.radioButtonSystem);
                     settings.getDisplayOptions().replace(KEY_DISPLAY_OPTION_THEME, VALUE_DISPLAY_OPTION_THEME_DEFAULT);
                     break;
                 case light:
-//                    TODO: change app theme
-//                    this.setTheme(R.style.NoActionBar);
+                    context.setTheme(R.style.Theme_SafeNotes_Light);
+                    this.setTheme(R.style.Theme_SafeNotes_Light_NoActionbar);
+                    relativeLayoutSettings.setBackgroundColor(getResources().getColor(R.color.white, this.getTheme()));
                     themeOptionValue.setText(R.string.radioButtonLight);
                     settings.getDisplayOptions().replace(KEY_DISPLAY_OPTION_THEME, VALUE_DISPLAY_OPTION_THEME_LIGHT);
                     break;
                 case dark:
-//                    TODO: change app theme
-//                    this.setTheme(R.style.NoActionBar);
+                    context.setTheme(R.style.Theme_SafeNotes_Dark);
+                    this.setTheme(R.style.Theme_SafeNotes_Dark_NoActionBar);
+                    relativeLayoutSettings.setBackgroundColor(getResources().getColor(R.color.themeDarkVariant1, this.getTheme()));
                     themeOptionValue.setText(R.string.radioButtonDark);
                     settings.getDisplayOptions().replace(KEY_DISPLAY_OPTION_THEME, VALUE_DISPLAY_OPTION_THEME_DARK);
                     break;
@@ -205,7 +212,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         if (!(themeOptionCard.getVisibility() == View.VISIBLE)) {
 
-            super.onBackPressed();
+            startActivity(new Intent(this, MainActivityAfterLogin.class));
         }else {
             themeOptionCard.setVisibility(View.GONE);
 
@@ -231,5 +238,10 @@ public class SettingsActivity extends AppCompatActivity {
                 SettingsActivity.YES));
 
         themeOptionValue.setText(settings.getDisplayOptions().get(KEY_DISPLAY_OPTION_THEME));
+    }
+
+    public static void getMainActivityAfterLoginContext(Context contextExp) {
+
+        context = contextExp;
     }
 }

@@ -3,6 +3,7 @@ package com.samski.safenotes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -16,7 +17,6 @@ import com.samski.safenotes.itemlist.ItemsAdapter;
 import com.samski.safenotes.itemlist.ItemsModel;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class EditorActivity extends AppCompatActivity {
 
@@ -25,11 +25,11 @@ public class EditorActivity extends AppCompatActivity {
     ArrayList<ItemsModel> items;
     DataHandler handler;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
+
 
         editorForUserText = findViewById(R.id.usersTextInEditor);
         handler = new DataHandler(this, DataHandler.USER_ITEMS_DATA_SHAREDPREF_KEY, DataHandler.ITEM_ARRAYLIST_TYPE);
@@ -41,12 +41,10 @@ public class EditorActivity extends AppCompatActivity {
             editorForUserText.setText(item.getUserText());
         }
 
-        editorForUserText.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                item.setUserText(editorForUserText.getText().toString());
-                return false;
-            }
+        editorForUserText.setOnKeyListener((View view, int i, KeyEvent keyEvent) -> {
+
+            item.setUserText(editorForUserText.getText().toString());
+            return false;
         });
 
     }
@@ -77,16 +75,17 @@ public class EditorActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
+    public void finish() {
         storeUserText();
-
+        super.finish();
     }
+
+
 
     @Override
-    public void finishAffinity() {
-        storeUserText();
-        super.finishAffinity();
-    }
+    public void onBackPressed() {
 
+        storeUserText();
+        startActivity(new Intent(this, MainActivityAfterLogin.class));
+    }
 }
