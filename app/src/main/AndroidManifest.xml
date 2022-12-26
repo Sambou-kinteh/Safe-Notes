@@ -10,9 +10,9 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_safe_notes"
+        android:icon="@mipmap/ic_safe_notes_version2"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_safe_notes_round"
+        android:roundIcon="@mipmap/ic_safe_notes_version2_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SafeNotes"
         tools:targetApi="31">

@@ -34,10 +34,12 @@ public class MainActivity extends AppCompatActivity {
 
             Intent intent = new Intent(this, MainActivityAfterLogin.class);
             startActivity(intent);
+        } else {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_main);
+
         }
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
 
 //        login logic

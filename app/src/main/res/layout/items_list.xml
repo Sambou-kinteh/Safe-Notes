@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/item"
-    app:cardBackgroundColor="@color/appTextStart"
+    app:cardBackgroundColor="?cardBackgroundColor"
     app:cardElevation="30dp"
     android:outlineSpotShadowColor="@color/appShadow"
     android:layout_marginStart="5dp"
@@ -27,7 +27,8 @@
             android:hint="@string/writeSomething"
             android:text="@string/writeSomething"
             android:id="@+id/userTxt"
-            android:padding="10dp"/>
+            android:padding="10dp"
+            android:textColor="?android:textColor"/>
 
     </RelativeLayout>
 

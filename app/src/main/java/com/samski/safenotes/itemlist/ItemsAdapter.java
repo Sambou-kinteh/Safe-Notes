@@ -2,6 +2,7 @@ package com.samski.safenotes.itemlist;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.samski.safenotes.itemlist.ItemsModel;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> {
 
@@ -73,7 +75,19 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
             context.startActivity(new Intent(context, EditorActivity.class));
         });
 
+        int color = items.get(position).getPreferedThemeColor();
+        Resources resources = context.getResources();
         holder.item.setCardBackgroundColor(items.get(position).getPreferedThemeColor());
+
+        if (Objects.equals(color, resources.getColor(R.color.white, context.getTheme()))) {
+
+            holder.userTxt.setTextColor(resources.getColor(R.color.themeDarkVariant1, context.getTheme()));
+            holder.userTxt.setHintTextColor(resources.getColor(R.color.themeDarkVariant1, context.getTheme()));
+        } else if (Objects.equals(color, resources.getColor(R.color.themeDarkVariant1, context.getTheme()))) {
+
+            holder.userTxt.setTextColor(resources.getColor(R.color.white, context.getTheme()));
+            holder.userTxt.setHintTextColor(resources.getColor(R.color.white, context.getTheme()));
+        }
 
     }
 

@@ -6,6 +6,6 @@
         android:title="Samski"
         app:showAsAction="ifRoom"
         android:id="@+id/changeColor"
-        android:icon="@drawable/ic_color_selector_light_theme"/>
+        android:icon="@drawable/ic_color_selector_dark_theme"/>
 
 </menu>

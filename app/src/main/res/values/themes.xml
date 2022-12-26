@@ -42,6 +42,7 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textColorHint">@color/white</item>
         <item name="android:windowBackground">@color/themeDarkVariant1</item>
+        <item name="cardBackgroundColor">@color/black</item>
     </style>
 
     <style name="Theme.SafeNotes.Dark.NoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
@@ -72,7 +73,8 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <item name="android:textColor">@color/black</item>
-        <!-- Customize your theme here. -->
+        <item name="android:textColorHint">@color/black</item>
+        <item name="cardBackgroundColor">@color/white</item>
     </style>
 
     <style name="Theme.SafeNotes.Light.NoActionbar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
