@@ -2,12 +2,14 @@ package com.samski.safenotes.itemlist;
 
 import com.samski.safenotes.data.DataParent;
 
-public class ItemsModel extends DataParent {
+import java.io.Serializable;
+
+public class ItemsModel extends DataParent implements Serializable {
 
     private String userText;
-    private int preferedThemeColor;
+    private String preferedThemeColor;
 
-    public ItemsModel(String userText, int preferedThemeColor) {
+    public ItemsModel(String userText, String preferedThemeColor) {
         this.userText = userText;
         this.preferedThemeColor = preferedThemeColor;
     }
@@ -20,11 +22,11 @@ public class ItemsModel extends DataParent {
         this.userText = userText;
     }
 
-    public int getPreferedThemeColor() {
+    public String getPreferedThemeColor() {
         return preferedThemeColor;
     }
 
-    public void setPreferedThemeColor(int preferedThemeColor) {
+    public void setPreferedThemeColor(String preferedThemeColor) {
         this.preferedThemeColor = preferedThemeColor;
     }
 

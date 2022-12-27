@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditorActivity">
+    tools:context=".EditorActivity"
+    android:id="@+id/editorLayout">
 
 
     <EditText
@@ -16,6 +17,15 @@
         android:hint="@string/writeSomething"
         android:inputType="textMultiLine"
         android:textColor="?android:textColor" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/colorView"
+        android:visibility="gone"
+        />
 
 
 </RelativeLayout>

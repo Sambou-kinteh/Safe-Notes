@@ -13,4 +13,16 @@
     <color name="appTextStart">#FFF</color>
     <color name="themeDarkVariant1">#232624</color>
 
+<!--    colors and that-->
+    <color name="red">#ff3c2e</color>
+    <color name="blue">#2e62ff</color>
+    <color name="yellow">#e3ff2e</color>
+    <color name="teal">#2eff9d</color>
+    <color name="grey">#bdbbbb</color>
+    <color name="orange">#ffab2e</color>
+    <color name="pink">#ff2eab</color>
+    <color name="green">#2eff4d</color>
+    <color name="brown">#ffc72e</color>
+    <color name="indigo">#ab2eff</color>
+
 </resources>

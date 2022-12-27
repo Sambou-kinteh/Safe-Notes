@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toolbar;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.samski.safenotes.colorsView.ColorModel;
 import com.samski.safenotes.data.DataHandler;
 import com.samski.safenotes.login.DataModel;
 import com.samski.safenotes.login.LoginLogic;
@@ -30,27 +31,26 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        super.onCreate(savedInstanceState);
         if (new DataHandler(this, DataHandler.USER_DATA_LOGIN_SHAREDPREF_KEY, DataModel.class).readPreferences() != null) {
 
             Intent intent = new Intent(this, MainActivityAfterLogin.class);
             startActivity(intent);
         } else {
-            super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
 
+            //        login logic
+            userNameFirst = findViewById(R.id.userNameFirst);
+            userNameLast = findViewById(R.id.userNameLast);
+            btnLogin = findViewById(R.id.btnLogin);
+            btnLogin.setOnClickListener((view -> {
+
+                initSettingsPref();
+                initColorsPref();
+                LoginLogic.getInstance(this, userNameFirst.getText().toString(), userNameLast.getText().toString());
+            }));
+
         }
-
-
-
-//        login logic
-        userNameFirst = findViewById(R.id.userNameFirst);
-        userNameLast = findViewById(R.id.userNameLast);
-        btnLogin = findViewById(R.id.btnLogin);
-        btnLogin.setOnClickListener((view -> {
-
-            initSettingsPref();
-            LoginLogic.getInstance(this, userNameFirst.getText().toString(), userNameLast.getText().toString());
-        }));
 
     }
 
@@ -70,6 +70,31 @@ public class MainActivity extends AppCompatActivity {
 //        write to settings pref
         SettingsModel settings = new SettingsModel(displayOptions, accountOptions);
         handler.writeToPreferences(settings);
+    }
+
+    public void initColorsPref() {
+
+//        one time colors init
+        DataHandler handler = new DataHandler(this, DataHandler.COLOR_DATA_SHAREDPREF_KEY, ColorModel.class);
+
+//        default colors to init
+        HashMap<String, Integer> colors = new HashMap<>();
+
+        colors.put(ColorModel.COLOR_KEY_BLUE, ColorModel.COLOR_VALUE_BLUE);
+        colors.put(ColorModel.COLOR_KEY_RED, ColorModel.COLOR_VALUE_RED);
+        colors.put(ColorModel.COLOR_KEY_GREEN, ColorModel.COLOR_VALUE_GREEN);
+        colors.put(ColorModel.COLOR_KEY_BROWN, ColorModel.COLOR_VALUE_BROWN);
+        colors.put(ColorModel.COLOR_KEY_INDIGO, ColorModel.COLOR_VALUE_INDIGO);
+        colors.put(ColorModel.COLOR_KEY_YELLOW, ColorModel.COLOR_VALUE_YELLOW);
+        colors.put(ColorModel.COLOR_KEY_BLUE, ColorModel.COLOR_VALUE_BLUE);
+        colors.put(ColorModel.COLOR_KEY_PINK, ColorModel.COLOR_VALUE_PINK);
+        colors.put(ColorModel.COLOR_KEY_GREY, ColorModel.COLOR_VALUE_GREY);
+        colors.put(ColorModel.COLOR_KEY_TEAL, ColorModel.COLOR_VALUE_TEAL);
+        colors.put(ColorModel.COLOR_KEY_ORANGE, ColorModel.COLOR_VALUE_ORANGE);
+
+        ColorModel color = new ColorModel(colors);
+        handler.writeToPreferences(color);
+
     }
 
 }

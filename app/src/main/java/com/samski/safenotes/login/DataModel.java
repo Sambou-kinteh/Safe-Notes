@@ -2,7 +2,9 @@ package com.samski.safenotes.login;
 
 import com.samski.safenotes.data.DataParent;
 
-public class DataModel extends DataParent {
+import java.io.Serializable;
+
+public class DataModel extends DataParent implements Serializable {
 
     private boolean isLogin;
     private String userNameFirst, userNameLast;

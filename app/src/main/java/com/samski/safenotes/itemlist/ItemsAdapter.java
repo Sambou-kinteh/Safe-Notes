@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.samski.safenotes.EditorActivity;
 import com.samski.safenotes.MainActivityAfterLogin;
 import com.samski.safenotes.R;
+import com.samski.safenotes.colorsView.ColorModel;
 import com.samski.safenotes.data.DataHandler;
 import com.samski.safenotes.login.DataModel;
 import com.samski.safenotes.itemlist.ItemsModel;
@@ -75,9 +76,11 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
             context.startActivity(new Intent(context, EditorActivity.class));
         });
 
-        int color = items.get(position).getPreferedThemeColor();
         Resources resources = context.getResources();
-        holder.item.setCardBackgroundColor(items.get(position).getPreferedThemeColor());
+        int color = resources.getColor(ColorModel.getColor(items.get(position).getPreferedThemeColor()),
+                context.getTheme());
+        holder.item.setCardBackgroundColor(resources.getColor
+                (ColorModel.getColor(items.get(position).getPreferedThemeColor()), context.getTheme()));
 
         if (Objects.equals(color, resources.getColor(R.color.white, context.getTheme()))) {
 

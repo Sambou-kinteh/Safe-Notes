@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.samski.safenotes.colorsView.ColorModel;
 import com.samski.safenotes.data.DataHandler;
 import com.samski.safenotes.itemlist.ItemsAdapter;
 import com.samski.safenotes.itemlist.ItemsModel;
@@ -170,8 +171,8 @@ public class MainActivityAfterLogin extends AppCompatActivity {
 
         if (flag.equals(ADD_ITEM_FLAG)) {
 
-            items.add(isDark ? new ItemsModel("", getResources().getColor(R.color.themeDarkVariant1, this.getTheme())) :
-                    new ItemsModel("", getResources().getColor(R.color.white, this.getTheme())));
+            items.add(isDark ? new ItemsModel("", ColorModel.COLOR_KEY_THEMEVARIANT1) :
+                    new ItemsModel("", ColorModel.COLOR_KEY_WHITE));
 
             adapter.setItems(items, ItemsAdapter.FLAG_SET_ONE);
 
