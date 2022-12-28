@@ -22,4 +22,8 @@
     <string name="deleteLoginBtn">Delete Login data</string>
     <string name="deleteItems">Delete Items</string>
     <string name="createAnItemText">Click on the add button to create a new Safe Note</string>
+    <string name="theTitle">Title</string>
+    <string name="Color">Color</string>
+    <string name="Font" translatable="false">Font</string>
+
 </resources>

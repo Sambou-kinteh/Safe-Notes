@@ -8,7 +8,6 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_margin="5dp"
-        android:background="@color/black"
         app:cardCornerRadius="30dp"
         android:id="@+id/colorItem"
         app:cardElevation="25dp"

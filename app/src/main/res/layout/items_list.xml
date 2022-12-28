@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--THE ITEMS WILL BE SHOWN IN THIS FORMAT-->
-
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/item"
     app:cardBackgroundColor="?cardBackgroundColor"
     app:cardElevation="30dp"
@@ -13,9 +12,7 @@
     android:layout_marginStart="5dp"
     android:layout_marginTop="10dp"
     android:layout_marginEnd="5dp"
-    app:cardCornerRadius="10dp"
-    android:maxHeight="300dp"
-    android:maxWidth="170dp">
+    app:cardCornerRadius="11dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -24,11 +21,23 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/textTitle"
+            android:padding="10dp"
+            android:hint="@string/theTitle"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:textColor="?android:textColor"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:hint="@string/writeSomething"
             android:text="@string/writeSomething"
             android:id="@+id/userTxt"
             android:padding="10dp"
-            android:textColor="?android:textColor"/>
+            android:textColor="?android:textColor"
+            android:layout_below="@+id/textTitle"
+            android:layout_marginTop="5dp"/>
 
     </RelativeLayout>
 

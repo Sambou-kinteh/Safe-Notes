@@ -18,6 +18,7 @@ import com.samski.safenotes.MainActivityAfterLogin;
 import com.samski.safenotes.R;
 import com.samski.safenotes.colorsView.ColorModel;
 import com.samski.safenotes.data.DataHandler;
+import com.samski.safenotes.font.FontModel;
 import com.samski.safenotes.login.DataModel;
 import com.samski.safenotes.itemlist.ItemsModel;
 
@@ -63,6 +64,8 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
         holder.userTxt.setText(userTxt.length() <= TEXTLENGTHLIMIT ? userTxt :
                 userTxt.substring(0, TEXTLENGTHLIMIT));
 
+        holder.textTitle.setText(items.get(position).getUserTitle());
+
         holder.item.setOnLongClickListener(view -> {
 
             deleteItem(position);
@@ -82,14 +85,18 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
         holder.item.setCardBackgroundColor(resources.getColor
                 (ColorModel.getColor(items.get(position).getPreferedThemeColor()), context.getTheme()));
 
+        holder.userTxt.setTypeface(context.getResources().getFont(FontModel.getFont(items.get(position).getFont())));
+
         if (Objects.equals(color, resources.getColor(R.color.white, context.getTheme()))) {
 
             holder.userTxt.setTextColor(resources.getColor(R.color.themeDarkVariant1, context.getTheme()));
             holder.userTxt.setHintTextColor(resources.getColor(R.color.themeDarkVariant1, context.getTheme()));
+            holder.textTitle.setTextColor(resources.getColor(R.color.themeDarkVariant1, context.getTheme()));
         } else if (Objects.equals(color, resources.getColor(R.color.themeDarkVariant1, context.getTheme()))) {
 
             holder.userTxt.setTextColor(resources.getColor(R.color.white, context.getTheme()));
             holder.userTxt.setHintTextColor(resources.getColor(R.color.white, context.getTheme()));
+            holder.textTitle.setTextColor(resources.getColor(R.color.white, context.getTheme()));
         }
 
     }
@@ -111,7 +118,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView userTxt;
+        private TextView userTxt, textTitle;
         private CardView item;
 
         public ViewHolder(@NonNull View itemView) {
@@ -119,6 +126,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
 
             item = itemView.findViewById(R.id.item);
             userTxt = itemView.findViewById(R.id.userTxt);
+            textTitle = itemView.findViewById(R.id.textTitle);
         }
     }
 

@@ -1,25 +1,26 @@
 package com.samski.safenotes;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.samski.safenotes.colorsView.ColorAdapter;
 import com.samski.safenotes.colorsView.ColorModel;
 import com.samski.safenotes.data.DataHandler;
+import com.samski.safenotes.font.FontAdapter;
+import com.samski.safenotes.font.FontModel;
 import com.samski.safenotes.itemlist.ItemsAdapter;
 import com.samski.safenotes.itemlist.ItemsModel;
 import com.samski.safenotes.settings.SettingsModel;
@@ -29,13 +30,15 @@ import java.util.Objects;
 
 public class EditorActivity extends AppCompatActivity {
 
-    public static RecyclerView colorView;
+    public static RecyclerView colorView, fontView;
     public static RelativeLayout editorLayout;
-    private EditText editorForUserText;
+    public static EditText editorForUserText, textTitleEditor;
     public static ItemsModel item;
+    public static CardView editorOptionsView;
     private ArrayList<ItemsModel> items;
     private DataHandler handler;
     private boolean isDark;
+    public static FloatingActionButton colorOption, fontOption;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -47,12 +50,12 @@ public class EditorActivity extends AppCompatActivity {
         switch (Objects.requireNonNull(settings.getDisplayOptions().get(SettingsActivity.KEY_DISPLAY_OPTION_THEME))) {
 
             case SettingsActivity.VALUE_DISPLAY_OPTION_THEME_DARK:
-                this.setTheme(R.style.Theme_SafeNotes_Dark);
+                this.setTheme(R.style.Theme_SafeNotes_Dark_NoActionBar);
                 isDark = true;
                 break;
 
             case SettingsActivity.VALUE_DISPLAY_OPTION_THEME_LIGHT:
-                this.setTheme(R.style.Theme_SafeNotes_Light);
+                this.setTheme(R.style.Theme_SafeNotes_Light_NoActionbar);
                 isDark = false;
                 break;
 
@@ -70,7 +73,12 @@ public class EditorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_editor);
 
         editorForUserText = findViewById(R.id.usersTextInEditor);
+        textTitleEditor = findViewById(R.id.textTitleEditor);
+        editorOptionsView = findViewById(R.id.editorOptionsView);
+        colorOption = findViewById(R.id.colorOption);
+        fontOption = findViewById(R.id.fontOption);
         colorView = findViewById(R.id.colorView);
+        fontView = findViewById(R.id.fontView);
         editorLayout = findViewById(R.id.editorLayout);
         handler = new DataHandler(this, DataHandler.USER_ITEMS_DATA_SHAREDPREF_KEY, DataHandler.ITEM_ARRAYLIST_TYPE);
         items = handler.readPreferences();
@@ -81,10 +89,28 @@ public class EditorActivity extends AppCompatActivity {
             editorForUserText.setText(item.getUserText());
         }
 
+        if (!item.getUserTitle().equals("")) {
+
+            textTitleEditor.setText(item.getUserTitle());
+        }
+
+        if (!item.getFont().equals("")) {
+
+            editorForUserText.setTypeface(getResources().getFont(FontModel.getFont(item.getFont())));
+        }
+
 //        set background to user preference
-        editorLayout.setBackgroundColor(getResources()
-                .getColor(ColorModel.getColor(item.getPreferedThemeColor()), getTheme()));
-        System.out.println(item.getPreferedThemeColor());
+        int color = getResources()
+                .getColor(ColorModel.getColor(item.getPreferedThemeColor()), getTheme());
+        editorLayout.setBackgroundColor(color);
+
+//        card view's color
+        editorOptionsView.setCardBackgroundColor(color);
+
+//        set backgound of menu choosers
+        colorOption.setBackgroundTintList(ColorStateList.valueOf(color));
+        fontOption.setBackgroundTintList(ColorStateList.valueOf(color));
+//        colorOption.setSupportImageTintList(ColorStateList.valueOf(color));
 
         editorForUserText.setOnKeyListener((View view, int i, KeyEvent keyEvent) -> {
 
@@ -92,61 +118,57 @@ public class EditorActivity extends AppCompatActivity {
             return false;
         });
 
+        textTitleEditor.setOnKeyListener((View view, int i, KeyEvent keyEvent) -> {
+
+            item.setUserTitle(textTitleEditor.getText().toString());
+            return false;
+        });
+
+        colorOption.setOnClickListener(view -> {
+
+            colorView.setVisibility(Objects.equals(colorView.getVisibility(), View.GONE) ? View.VISIBLE : View.GONE);
+            openColorView();
+        });
+
+        fontOption.setOnClickListener(view -> {
+
+            fontView.setVisibility(Objects.equals(fontView.getVisibility(), View.GONE) ? View.VISIBLE: View.GONE);
+            openFontView();
+        });
+
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        if (!isDark) {
+    private void storeDataUpdate() {
 
-            menuInflater.inflate(R.menu.editor_menu, menu);
+        if (item.getUserTitle().equals("") && item.getUserText().equals("")) {
+
+            items.remove(item);
+            ItemsAdapter.currentItemPosition = 0;
         } else {
+            item.setUserTitle(textTitleEditor.getText().toString());
+            item.setUserText(editorForUserText.getText().toString());
+            items.set(ItemsAdapter.currentItemPosition, item);
 
-            menuInflater.inflate(R.menu.editor_menu_dark, menu);
         }
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        final int color = R.id.changeColor;
-
-        switch (item.getItemId()) {
-
-            case color:
-                colorView.setVisibility(Objects.equals(colorView.getVisibility(), View.GONE) ? View.VISIBLE : View.GONE);
-                openColorView();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    public void storeUserText() {
-
-        item.setUserText(editorForUserText.getText().toString());
-        items.set(ItemsAdapter.currentItemPosition, item);
         handler.writeToPreferences(items);
 
     }
 
     @Override
     public void finish() {
-        storeUserText();
+        storeDataUpdate();
         super.finish();
     }
-
 
 
     @Override
     public void onBackPressed() {
 
-        storeUserText();
         startActivity(new Intent(this, MainActivityAfterLogin.class));
+        storeDataUpdate();
     }
 
-    public void openColorView() {
+    private void openColorView() {
 
         DataHandler handler = new DataHandler(this, DataHandler.COLOR_DATA_SHAREDPREF_KEY, ColorModel.class);
         ColorModel color = handler.readPreferences();
@@ -157,4 +179,16 @@ public class EditorActivity extends AppCompatActivity {
         colorView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
 
     }
+
+    private void openFontView() {
+
+        DataHandler handler = new DataHandler(this, DataHandler.FONT_DATA_SHAREDPREF_KEY, FontModel.class);
+        FontModel font = handler.readPreferences();
+
+        FontAdapter adapter = new FontAdapter(this);
+        adapter.setFont(font);
+        fontView.setAdapter(adapter);
+        fontView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+    }
+
 }

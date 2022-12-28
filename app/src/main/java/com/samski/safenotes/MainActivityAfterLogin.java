@@ -171,8 +171,8 @@ public class MainActivityAfterLogin extends AppCompatActivity {
 
         if (flag.equals(ADD_ITEM_FLAG)) {
 
-            items.add(isDark ? new ItemsModel("", ColorModel.COLOR_KEY_THEMEVARIANT1) :
-                    new ItemsModel("", ColorModel.COLOR_KEY_WHITE));
+            items.add(isDark ? new ItemsModel("", ColorModel.COLOR_KEY_THEMEVARIANT1, "", "") :
+                    new ItemsModel("", ColorModel.COLOR_KEY_WHITE, "", ""));
 
             adapter.setItems(items, ItemsAdapter.FLAG_SET_ONE);
 

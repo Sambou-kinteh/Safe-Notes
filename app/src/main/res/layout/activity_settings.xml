@@ -20,7 +20,8 @@
         app:rippleColor="#bcc0c2"
         app:elevation="0dp"
         app:fabCustomSize="45dp"
-        android:outlineAmbientShadowColor="@color/white" />
+        android:outlineAmbientShadowColor="@color/white"
+        app:borderWidth="0dp"/>
 
     <TextView
         android:layout_width="wrap_content"

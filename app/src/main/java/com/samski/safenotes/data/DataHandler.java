@@ -16,6 +16,7 @@ public class DataHandler {
     public static String USER_ITEMS_DATA_SHAREDPREF_KEY = "userItemsData"; //IN CLASS USAGE NOT INTENDED
     public static String USER_SETTINGS_DATA_SHAREDPREF_KEY = "settingsData"; //IN CLASS USAGE NOT INTENDED
     public static String COLOR_DATA_SHAREDPREF_KEY = "colorsHashMapSerialized";
+    public static String FONT_DATA_SHAREDPREF_KEY = "fontsHashMapSerialized";
     public static Type ITEM_ARRAYLIST_TYPE = new TypeToken<ArrayList<ItemsModel>>(){}.getType();
 
     public String userPrefKey;
@@ -44,7 +45,7 @@ public class DataHandler {
             }
 
             ArrayList<ItemsModel> init = new ArrayList<>();
-            init.add(new ItemsModel("", ""));
+            init.add(new ItemsModel("", "", "", ""));
             return gsonObj.fromJson(gsonObj.toJson(new ArrayList<ItemsModel>()), type);
 
         } catch (Exception e) {
