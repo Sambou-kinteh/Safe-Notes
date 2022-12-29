@@ -9,6 +9,8 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.DragEvent;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -117,17 +119,43 @@ public class EditorActivity extends AppCompatActivity {
         fontOption.setBackgroundTintList(ColorStateList.valueOf(color));
 //        colorOption.setSupportImageTintList(ColorStateList.valueOf(color));
 
-        editorForUserText.setOnKeyListener((View view, int i, KeyEvent keyEvent) -> {
 
-            item.setUserText(editorForUserText.getText().toString());
-            return false;
+        editorForUserText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                item.setUserText(editorForUserText.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
         });
 
-        textTitleEditor.setOnKeyListener((View view, int i, KeyEvent keyEvent) -> {
+        textTitleEditor.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-            item.setUserTitle(textTitleEditor.getText().toString());
-            return false;
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                item.setUserTitle(textTitleEditor.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
         });
+
 
         colorOption.setOnClickListener(view -> {
 

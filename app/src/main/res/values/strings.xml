@@ -26,5 +26,7 @@
     <string name="Color">Color</string>
     <string name="Font" translatable="false">Font</string>
     <string name="Search">search</string>
+    <string name="ItemNotFound">No matching items found</string>
+    <string name="createFirst">No safe notes available</string>
 
 </resources>

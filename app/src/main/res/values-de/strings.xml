@@ -23,4 +23,6 @@
     <string name="theTitle">Titel</string>
     <string name="Color">Farbe</string>
     <string name="Search">suchen</string>
+    <string name="ItemNotFound">Kein Match gefunden</string>
+    <string name="createFirst">Kein safe note vorhanden</string>
 </resources>

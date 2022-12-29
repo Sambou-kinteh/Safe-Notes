@@ -1,13 +1,7 @@
 package com.samski.safenotes;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -16,11 +10,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.view.DragEvent;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -28,16 +20,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.samski.safenotes.colorsView.ColorModel;
 import com.samski.safenotes.data.DataHandler;
 import com.samski.safenotes.itemlist.ItemsAdapter;
 import com.samski.safenotes.itemlist.ItemsModel;
-import com.samski.safenotes.login.DataModel;
 import com.samski.safenotes.settings.SettingsModel;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Objects;
 
 
@@ -48,12 +39,13 @@ public class MainActivityAfterLogin extends AppCompatActivity {
     public static int SCREEN_WIDTH;
     public static int SCREEN_HEIGHT;
     public static FloatingActionButton floatingActionButton;
+    public static TextView addNewTxt;
     public boolean isDark;
+    public static ArrayList<ItemsModel> items;
 
     private RecyclerView itemsView;
     private DataHandler handler;
     private ItemsAdapter adapter;
-    private TextView addNewTxt;
     private CardView searchBar;
     private EditText searchBarSearch;
     private RelativeLayout layoutActivityMain;
@@ -65,7 +57,7 @@ public class MainActivityAfterLogin extends AppCompatActivity {
 
         handler = new DataHandler(MainActivityAfterLogin.this, DataHandler.USER_ITEMS_DATA_SHAREDPREF_KEY, DataHandler.ITEM_ARRAYLIST_TYPE);
 
-        ArrayList<DataModel> items = handler.readPreferences();
+        items = handler.readPreferences();
 
         SettingsModel settings = new DataHandler(this, DataHandler.USER_SETTINGS_DATA_SHAREDPREF_KEY,
                 SettingsModel.class).readPreferences();
@@ -113,7 +105,7 @@ public class MainActivityAfterLogin extends AppCompatActivity {
 
         searchBarAdd.setOnClickListener(view -> {
 
-            int itemSize = loadDataToUser(ADD_ITEM_FLAG);
+            int itemSize = loadDataToUser(ADD_ITEM_FLAG, null);
             ItemsAdapter.currentItemPosition = itemSize-1;
             startActivity(new Intent(this, EditorActivity.class));
         });
@@ -123,7 +115,7 @@ public class MainActivityAfterLogin extends AppCompatActivity {
         if (items.size() != 0) {
 
 //            load data to user if user already has items
-            loadDataToUser(DONT_ADD_ITEM_FLAG);
+            loadDataToUser(DONT_ADD_ITEM_FLAG, null);
             if (Objects.equals(addNewTxt.getVisibility(), View.VISIBLE)) {
                 addNewTxt.setVisibility(View.GONE);
             }
@@ -132,7 +124,7 @@ public class MainActivityAfterLogin extends AppCompatActivity {
         floatingActionButton = findViewById(R.id.floatingButtonAdd);
         floatingActionButton.setOnClickListener((view) ->{
 
-            int itemSize = loadDataToUser(ADD_ITEM_FLAG);
+            int itemSize = loadDataToUser(ADD_ITEM_FLAG, null);
             ItemsAdapter.currentItemPosition = itemSize-1;
             startActivity(new Intent(this, EditorActivity.class));
 
@@ -148,9 +140,50 @@ public class MainActivityAfterLogin extends AppCompatActivity {
             floatingActionButton.setVisibility(View.VISIBLE);
         }
 
-//        on scroll event
-        itemsView.setOnScrollChangeListener((View view, int i, int i1, int i2, int i3) -> {
-//            searchBar.animate().translationY(i3 / 2f).setDuration(200).alpha(1f - i3 / 1000f);
+        searchBarSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                if (items.size() > 0) {
+
+                    ArrayList<ItemsModel> results;
+                    if (charSequence.length() > 2) {
+                        results = searchText(charSequence.toString());
+
+                        if (results.size() < 1) {
+
+                            loadDataToUser(DONT_ADD_ITEM_FLAG, null);
+                            addNewTxt.setText(R.string.ItemNotFound);
+                            addNewTxt.setVisibility(View.VISIBLE);
+                        }
+
+                        loadDataToUser(DONT_ADD_ITEM_FLAG, results);
+                    } else {
+
+                        if (Objects.equals(addNewTxt.getVisibility(), View.VISIBLE)) {
+
+                            addNewTxt.setVisibility(View.GONE);
+                            addNewTxt.setText(R.string.createAnItemText);
+                        }
+                        loadDataToUser(DONT_ADD_ITEM_FLAG, null);
+                    }
+                } else {
+                    if (charSequence.length() - 2 == 1) {
+
+                        Toast.makeText(MainActivityAfterLogin.this, R.string.createFirst, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
         });
 
         //share context with settingsactivity
@@ -159,7 +192,7 @@ public class MainActivityAfterLogin extends AppCompatActivity {
     }
 
 //    return current size of items
-    public int loadDataToUser(String flag) {
+    public int loadDataToUser(String flag, ArrayList<ItemsModel> searchItems) {
 
         itemsView = findViewById(R.id.itemsList);
         ArrayList<ItemsModel> items = handler.readPreferences();
@@ -168,14 +201,21 @@ public class MainActivityAfterLogin extends AppCompatActivity {
 
         adapter = new ItemsAdapter(MainActivityAfterLogin.this);
 
-        if (flag.equals(ADD_ITEM_FLAG)) {
+        if (!(searchItems == null)) {
 
-            items.add(isDark ? new ItemsModel("", ColorModel.COLOR_KEY_THEMEVARIANT1, "", "") :
-                    new ItemsModel("", ColorModel.COLOR_KEY_WHITE, "", ""));
+            adapter.setItems(searchItems, ItemsAdapter.FLAG_SET_RANGE);
 
-            adapter.setItems(items, ItemsAdapter.FLAG_SET_ONE);
+        }else {
+            if (flag.equals(ADD_ITEM_FLAG)) {
 
-        }else adapter.setItems(items, ItemsAdapter.FLAG_SET_RANGE);
+                items.add(isDark ? new ItemsModel("", ColorModel.COLOR_KEY_THEMEVARIANT1, "", "") :
+                        new ItemsModel("", ColorModel.COLOR_KEY_WHITE, "", ""));
+
+                adapter.setItems(items, ItemsAdapter.FLAG_SET_ONE);
+
+            }else adapter.setItems(items, ItemsAdapter.FLAG_SET_RANGE);
+        }
+
 
 //        dataset could be initialised alternatively with adapter.InitializeItemPref()
         itemsView.setAdapter(adapter);
@@ -200,6 +240,29 @@ public class MainActivityAfterLogin extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finishAffinity();
+    }
+
+    private ArrayList<ItemsModel> searchText(String text) {
+
+//        TODO: optimization with the use of async and binary search algorithm
+
+        ArrayList<ItemsModel> searchResults = new ArrayList<>();
+        text = text.toLowerCase(Locale.ROOT);
+
+        if (items.size() > 0) {
+
+            for (int i = 0; i < items.size(); i++) {
+
+                ItemsModel item = items.get(i);
+
+                if (item.getUserText().toLowerCase(Locale.ROOT).contains(text) || item.getUserTitle().toLowerCase(Locale.ROOT).contains(text)) {
+
+                    searchResults.add(item);
+                }
+            }
+        }
+
+        return searchResults;
     }
 
 }

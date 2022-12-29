@@ -69,6 +69,9 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
         holder.item.setOnLongClickListener(view -> {
 
             deleteItem(position);
+            if (items.size() == 0) {
+                MainActivityAfterLogin.addNewTxt.setVisibility(View.VISIBLE);
+            }
             return true;
         });
 
