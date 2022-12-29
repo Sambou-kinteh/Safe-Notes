@@ -25,5 +25,6 @@
     <string name="theTitle">Title</string>
     <string name="Color">Color</string>
     <string name="Font" translatable="false">Font</string>
+    <string name="Search">search</string>
 
 </resources>

@@ -9,11 +9,15 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.view.DragEvent;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Adapter;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.samski.safenotes.colorsView.ColorAdapter;
@@ -27,18 +31,19 @@ import com.samski.safenotes.settings.SettingsModel;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class EditorActivity extends AppCompatActivity {
 
     public static RecyclerView colorView, fontView;
     public static RelativeLayout editorLayout;
     public static EditText editorForUserText, textTitleEditor;
+    public static FloatingActionButton colorOption, fontOption;
     public static ItemsModel item;
     public static CardView editorOptionsView;
     private ArrayList<ItemsModel> items;
     private DataHandler handler;
-    private boolean isDark;
-    public static FloatingActionButton colorOption, fontOption;
+    private ScrollView editorScrollView;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -51,12 +56,10 @@ public class EditorActivity extends AppCompatActivity {
 
             case SettingsActivity.VALUE_DISPLAY_OPTION_THEME_DARK:
                 this.setTheme(R.style.Theme_SafeNotes_Dark_NoActionBar);
-                isDark = true;
                 break;
 
             case SettingsActivity.VALUE_DISPLAY_OPTION_THEME_LIGHT:
                 this.setTheme(R.style.Theme_SafeNotes_Light_NoActionbar);
-                isDark = false;
                 break;
 
             case SettingsActivity.VALUE_DISPLAY_OPTION_THEME_DEFAULT:
@@ -79,6 +82,7 @@ public class EditorActivity extends AppCompatActivity {
         fontOption = findViewById(R.id.fontOption);
         colorView = findViewById(R.id.colorView);
         fontView = findViewById(R.id.fontView);
+        editorScrollView = findViewById(R.id.editorScrollView);
         editorLayout = findViewById(R.id.editorLayout);
         handler = new DataHandler(this, DataHandler.USER_ITEMS_DATA_SHAREDPREF_KEY, DataHandler.ITEM_ARRAYLIST_TYPE);
         items = handler.readPreferences();
@@ -104,8 +108,9 @@ public class EditorActivity extends AppCompatActivity {
                 .getColor(ColorModel.getColor(item.getPreferedThemeColor()), getTheme());
         editorLayout.setBackgroundColor(color);
 
-//        card view's color
+//        card view's color and alpha
         editorOptionsView.setCardBackgroundColor(color);
+        editorOptionsView.setAlpha(0.9f);
 
 //        set backgound of menu choosers
         colorOption.setBackgroundTintList(ColorStateList.valueOf(color));
@@ -136,6 +141,30 @@ public class EditorActivity extends AppCompatActivity {
             openFontView();
         });
 
+        editorScrollView.setOnScrollChangeListener((View view, int i, int i1, int i2, int i3) -> {
+
+            if (Objects.equals(colorView.getVisibility(), View.VISIBLE)
+                    || Objects.equals(fontView.getVisibility(), View.VISIBLE)) {
+
+                fontView.setVisibility(View.GONE);
+                colorView.setVisibility(View.GONE);
+            }
+            editorOptionsView.animate().translationY(i1/2f).setDuration(200).alpha(.9f - i1/1000f);
+            textTitleEditor.animate().translationY(-i1/2f).setDuration(200).alpha(1f - i1/1000f);
+
+            if (i1 > 300) {
+
+                textTitleEditor.setVisibility(View.INVISIBLE);
+                if (i1 > 400) {
+                    textTitleEditor.setVisibility(View.GONE);
+                }
+            } else {
+                textTitleEditor.setVisibility(View.VISIBLE);
+            }
+
+        });
+
+
     }
 
     private void storeDataUpdate() {
@@ -159,7 +188,6 @@ public class EditorActivity extends AppCompatActivity {
         storeDataUpdate();
         super.finish();
     }
-
 
     @Override
     public void onBackPressed() {

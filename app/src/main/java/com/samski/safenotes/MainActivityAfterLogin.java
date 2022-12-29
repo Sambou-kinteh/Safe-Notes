@@ -14,13 +14,16 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,13 +47,17 @@ public class MainActivityAfterLogin extends AppCompatActivity {
     public static final String ADD_ITEM_FLAG = "add";
     public static int SCREEN_WIDTH;
     public static int SCREEN_HEIGHT;
+    public static FloatingActionButton floatingActionButton;
+    public boolean isDark;
 
     private RecyclerView itemsView;
     private DataHandler handler;
     private ItemsAdapter adapter;
     private TextView addNewTxt;
-    public static FloatingActionButton floatingActionButton;
-    public boolean isDark;
+    private CardView searchBar;
+    private EditText searchBarSearch;
+    private RelativeLayout layoutActivityMain;
+    private FloatingActionButton searchBarSettings, searchBarAdd;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -67,13 +74,13 @@ public class MainActivityAfterLogin extends AppCompatActivity {
         switch (Objects.requireNonNull(settings.getDisplayOptions().get(SettingsActivity.KEY_DISPLAY_OPTION_THEME))) {
 
             case SettingsActivity.VALUE_DISPLAY_OPTION_THEME_LIGHT:
-                this.setTheme(R.style.Theme_SafeNotes_Light);
+                this.setTheme(R.style.Theme_SafeNotes_Light_NoActionbar);
                 isDark = false;
 //                findViewById(R.id.layoutActivityMain).setBackgroundColor(getResources().getColor(R.color.white, this.getTheme()));
                 break;
 
             case SettingsActivity.VALUE_DISPLAY_OPTION_THEME_DARK:
-                this.setTheme(R.style.Theme_SafeNotes_Dark);
+                this.setTheme(R.style.Theme_SafeNotes_Dark_NoActionBar);
                 isDark = true;
 //                findViewById(R.id.layoutActivityMain).setBackgroundColor(getResources().getColor(R.color.themeDarkVariant1, this.getTheme()));
                 break;
@@ -85,6 +92,31 @@ public class MainActivityAfterLogin extends AppCompatActivity {
 //        create and set content view
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_after_login);
+
+        searchBar = findViewById(R.id.searchBar);
+        searchBarSearch = findViewById(R.id.searchBarSearch);
+        searchBarSettings = findViewById(R.id.searchBarSettings);
+        searchBarAdd = findViewById(R.id.searchBarAdd);
+        layoutActivityMain = findViewById(R.id.layoutActivityMain);
+
+        searchBarSettings.setBackgroundTintList(ColorStateList.valueOf(
+                getResources().getColor(R.color.white, getTheme())
+        ));
+        searchBarAdd.setBackgroundTintList(ColorStateList.valueOf(
+                getResources().getColor(R.color.white, getTheme())
+        ));
+
+        searchBarSettings.setOnClickListener(view -> {
+
+            startActivity(new Intent(MainActivityAfterLogin.this, SettingsActivity.class));
+        });
+
+        searchBarAdd.setOnClickListener(view -> {
+
+            int itemSize = loadDataToUser(ADD_ITEM_FLAG);
+            ItemsAdapter.currentItemPosition = itemSize-1;
+            startActivity(new Intent(this, EditorActivity.class));
+        });
 
 //        load user settings to view
         addNewTxt = findViewById(R.id.createAnItemText);
@@ -116,47 +148,14 @@ public class MainActivityAfterLogin extends AppCompatActivity {
             floatingActionButton.setVisibility(View.VISIBLE);
         }
 
+//        on scroll event
+        itemsView.setOnScrollChangeListener((View view, int i, int i1, int i2, int i3) -> {
+//            searchBar.animate().translationY(i3 / 2f).setDuration(200).alpha(1f - i3 / 1000f);
+        });
+
         //share context with settingsactivity
         SettingsActivity.getMainActivityAfterLoginContext(this);
 
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        this.finishAffinity();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        if (isDark) {
-            menuInflater.inflate(R.menu.main_menu_dark, menu);
-
-        }else menuInflater.inflate(R.menu.main_menu, menu);
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        final int settingsCase = R.id.settings;
-        final int addCase = R.id.add;
-        switch (item.getItemId()) {
-
-            case settingsCase:
-                startActivity(new Intent(MainActivityAfterLogin.this, SettingsActivity.class));
-                return true;
-            case addCase:
-                int itemSize = loadDataToUser(ADD_ITEM_FLAG);
-                ItemsAdapter.currentItemPosition = itemSize-1;
-                startActivity(new Intent(this, EditorActivity.class));
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
 //    return current size of items
@@ -197,5 +196,10 @@ public class MainActivityAfterLogin extends AppCompatActivity {
         SCREEN_WIDTH = displayMetrics.widthPixels;
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishAffinity();
+    }
 
 }

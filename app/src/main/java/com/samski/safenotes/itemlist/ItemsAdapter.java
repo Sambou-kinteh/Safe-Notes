@@ -85,7 +85,11 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
         holder.item.setCardBackgroundColor(resources.getColor
                 (ColorModel.getColor(items.get(position).getPreferedThemeColor()), context.getTheme()));
 
-        holder.userTxt.setTypeface(context.getResources().getFont(FontModel.getFont(items.get(position).getFont())));
+        int fontId = FontModel.getFont(items.get(position).getFont());
+        if (fontId != 0) {
+
+            holder.userTxt.setTypeface(context.getResources().getFont(fontId));
+        }
 
         if (Objects.equals(color, resources.getColor(R.color.white, context.getTheme()))) {
 

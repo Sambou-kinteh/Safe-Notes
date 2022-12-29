@@ -2,17 +2,28 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
     <item
-        android:title="@string/menuAdd"
+        android:title="@string/Search"
         app:showAsAction="ifRoom"
-        android:id="@+id/add"
-        android:icon="@drawable/ic_add_light_theme"/>
+        android:id="@+id/search"
+        android:icon="@drawable/ic_search_selector"
+        
+        />
 
-    <item
-        android:title="@string/menuSettings"
-        android:id="@+id/settings"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_settings_light_theme"/>
+    <group>
+
+        <item
+            android:title="@string/menuAdd"
+            app:showAsAction="ifRoom"
+            android:id="@+id/add"
+            android:icon="@drawable/ic_add_light_theme"/>
+
+        <item
+            android:title="@string/menuSettings"
+            android:id="@+id/settings"
+            app:showAsAction="ifRoom"
+            android:icon="@drawable/ic_settings_light_theme"/>
+
+    </group>
 
 </menu>

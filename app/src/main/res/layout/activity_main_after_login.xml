@@ -7,10 +7,74 @@
     tools:context=".MainActivityAfterLogin"
     android:id="@+id/layoutActivityMain">
 
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:id="@+id/searchBar"
+        app:cardCornerRadius="25dp"
+        app:cardElevation="25dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:id="@+id/searchBarSearch"
+                android:hint="@string/Search"
+                android:padding="5dp"
+                android:layout_marginEnd="120dp"
+                android:layout_marginStart="15dp"
+                android:maxLines="1"
+                android:textSize="16sp"/>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/searchBarSettings"
+                android:src="@drawable/ic_settings_dark_theme"
+                android:layout_toStartOf="@+id/searchBarAdd"
+                android:layout_marginStart="5dp"
+                android:layout_centerVertical="true"
+                app:borderWidth="0dp"
+                app:elevation="0dp"
+                app:fabCustomSize="38dp"
+                tools:ignore="SpeakableTextPresentCheck"
+                />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/searchBarAdd"
+                android:src="@drawable/ic_add_dark_theme"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                app:borderWidth="0dp"
+                app:elevation="0dp"
+                app:fabCustomSize="38dp"
+                tools:ignore="SpeakableTextPresentCheck"
+                />
+
+        </RelativeLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/itemsList" />
+        android:id="@+id/itemsList"
+        android:elevation="0dp"
+        android:layout_below="@+id/searchBar">
+
+
+    </androidx.recyclerview.widget.RecyclerView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingButtonAdd"
@@ -23,7 +87,8 @@
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
         android:backgroundTint="@color/white"
-        android:src="@drawable/ic_add_light_theme" />
+        android:src="@drawable/ic_add_light_theme"
+        app:borderWidth="0dp"/>
 
     <TextView
         android:layout_width="match_parent"

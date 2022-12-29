@@ -22,4 +22,5 @@
     <string name="createAnItemText">Klicken Sie auf den Add-Knopf</string>
     <string name="theTitle">Titel</string>
     <string name="Color">Farbe</string>
+    <string name="Search">suchen</string>
 </resources>

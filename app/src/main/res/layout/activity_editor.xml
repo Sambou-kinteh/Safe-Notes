@@ -24,21 +24,26 @@
         android:textStyle="bold"
         android:inputType="text" />
 
-    <EditText
-        android:id="@+id/usersTextInEditor"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/textTitleEditor"
-        android:background="@android:color/transparent"
-        android:ems="10"
-        android:gravity="start|top"
-        android:hint="@string/writeSomething"
-        android:inputType="textMultiLine"
-        android:isScrollContainer="true"
-        android:overScrollMode="ifContentScrolls"
-        android:padding="10dp"
-        android:textColor="?android:textColor"
-        android:textSize="14sp" />
+        android:id="@+id/editorScrollView">
+
+        <EditText
+            android:id="@+id/usersTextInEditor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:ems="10"
+            android:gravity="start|top"
+            android:hint="@string/writeSomething"
+            android:inputType="textMultiLine"
+            android:padding="10dp"
+            android:textColor="?android:textColor"
+            android:textSize="14sp" />
+
+    </ScrollView>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
