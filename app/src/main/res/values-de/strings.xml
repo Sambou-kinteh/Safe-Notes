@@ -25,4 +25,5 @@
     <string name="Search">suchen</string>
     <string name="ItemNotFound">Kein Match gefunden</string>
     <string name="createFirst">Kein safe note vorhanden</string>
+    <string name="archive">Verstecken</string>
 </resources>

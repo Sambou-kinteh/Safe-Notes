@@ -28,5 +28,6 @@
     <string name="Search">search</string>
     <string name="ItemNotFound">No matching items found</string>
     <string name="createFirst">No safe notes available</string>
+    <string name="archive">Archive</string>
 
 </resources>

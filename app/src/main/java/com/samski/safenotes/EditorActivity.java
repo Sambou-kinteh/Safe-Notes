@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -43,6 +44,8 @@ public class EditorActivity extends AppCompatActivity {
     public static FloatingActionButton colorOption, fontOption;
     public static ItemsModel item;
     public static CardView editorOptionsView;
+    public int color;
+
     private ArrayList<ItemsModel> items;
     private DataHandler handler;
     private ScrollView editorScrollView;
@@ -106,7 +109,7 @@ public class EditorActivity extends AppCompatActivity {
         }
 
 //        set background to user preference
-        int color = getResources()
+        color = getResources()
                 .getColor(ColorModel.getColor(item.getPreferedThemeColor()), getTheme());
         editorLayout.setBackgroundColor(color);
 
@@ -159,23 +162,40 @@ public class EditorActivity extends AppCompatActivity {
 
         colorOption.setOnClickListener(view -> {
 
-            colorView.setVisibility(Objects.equals(colorView.getVisibility(), View.GONE) ? View.VISIBLE : View.GONE);
+            boolean isToShow = Objects.equals(colorView.getVisibility(), View.GONE);
+            colorView.setVisibility(isToShow ? View.VISIBLE : View.GONE);
+            colorOption.setBackgroundTintList(
+                    isToShow
+                    ? ColorStateList.valueOf(
+                    getResources().getColor(R.color.clicked, getTheme()))
+                    : ColorStateList.valueOf(color)
+            );
             openColorView();
         });
 
         fontOption.setOnClickListener(view -> {
 
-            fontView.setVisibility(Objects.equals(fontView.getVisibility(), View.GONE) ? View.VISIBLE: View.GONE);
+            boolean isToShow = Objects.equals(fontView.getVisibility(), View.GONE);
+            fontView.setVisibility(isToShow ? View.VISIBLE: View.GONE);
+            fontOption.setBackgroundTintList(
+                    isToShow
+                    ? ColorStateList.valueOf(
+                    getResources().getColor(R.color.clicked, getTheme()))
+                    : ColorStateList.valueOf(color)
+            );
             openFontView();
         });
 
         editorScrollView.setOnScrollChangeListener((View view, int i, int i1, int i2, int i3) -> {
 
-            if (Objects.equals(colorView.getVisibility(), View.VISIBLE)
-                    || Objects.equals(fontView.getVisibility(), View.VISIBLE)) {
+            if (Objects.equals(colorView.getVisibility(), View.VISIBLE)) {
+
+                colorView.setVisibility(View.GONE);
+                colorOption.setBackgroundTintList(ColorStateList.valueOf(color));
+            } else if (Objects.equals(fontView.getVisibility(), View.VISIBLE)) {
 
                 fontView.setVisibility(View.GONE);
-                colorView.setVisibility(View.GONE);
+                fontOption.setBackgroundTintList(ColorStateList.valueOf(color));
             }
             editorOptionsView.animate().translationY(i1/2f).setDuration(200).alpha(.9f - i1/1000f);
             textTitleEditor.animate().translationY(-i1/2f).setDuration(200).alpha(1f - i1/1000f);

@@ -46,10 +46,10 @@ public class MainActivityAfterLogin extends AppCompatActivity {
     private RecyclerView itemsView;
     private DataHandler handler;
     private ItemsAdapter adapter;
-    private CardView searchBar;
+    private CardView searchBar, pageViewArchive;
     private EditText searchBarSearch;
-    private RelativeLayout layoutActivityMain;
-    private FloatingActionButton searchBarSettings, searchBarAdd;
+    private RelativeLayout layoutActivityMain, normalScreen;
+    private FloatingActionButton searchBarSettings, searchBarAdd, searchBarPageView;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -89,12 +89,18 @@ public class MainActivityAfterLogin extends AppCompatActivity {
         searchBarSearch = findViewById(R.id.searchBarSearch);
         searchBarSettings = findViewById(R.id.searchBarSettings);
         searchBarAdd = findViewById(R.id.searchBarAdd);
+        searchBarPageView = findViewById(R.id.searchBarPageView);
         layoutActivityMain = findViewById(R.id.layoutActivityMain);
+        pageViewArchive = findViewById(R.id.pageViewArchive);
+        normalScreen = findViewById(R.id.normalScreen);
 
         searchBarSettings.setBackgroundTintList(ColorStateList.valueOf(
                 getResources().getColor(R.color.white, getTheme())
         ));
         searchBarAdd.setBackgroundTintList(ColorStateList.valueOf(
+                getResources().getColor(R.color.white, getTheme())
+        ));
+        searchBarPageView.setBackgroundTintList(ColorStateList.valueOf(
                 getResources().getColor(R.color.white, getTheme())
         ));
 
@@ -108,6 +114,21 @@ public class MainActivityAfterLogin extends AppCompatActivity {
             int itemSize = loadDataToUser(ADD_ITEM_FLAG, null);
             ItemsAdapter.currentItemPosition = itemSize-1;
             startActivity(new Intent(this, EditorActivity.class));
+        });
+
+        searchBarPageView.setOnClickListener(view -> {
+
+            boolean isToOpen = Objects.equals(pageViewArchive.getVisibility(), View.GONE);
+            pageViewArchive
+                    .setVisibility(isToOpen
+                    ? View.VISIBLE : View.GONE);
+            if (isToOpen) {
+
+                searchBarPageView.setClickable(false);
+                searchBarSearch.setClickable(false);
+                searchBarSettings.setClickable(false);
+                floatingActionButton.setClickable(false);
+            }
         });
 
 //        load user settings to view

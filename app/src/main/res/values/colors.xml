@@ -12,6 +12,7 @@
     <color name="appCardStart">#0FF4C6</color>
     <color name="appTextStart">#FFF</color>
     <color name="themeDarkVariant1">#232624</color>
+    <color name="clicked">#e0e0e0</color>
 
 <!--    colors and that-->
     <color name="red">#ff3c2e</color>
