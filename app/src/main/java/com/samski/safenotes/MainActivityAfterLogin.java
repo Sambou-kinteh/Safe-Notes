@@ -2,18 +2,24 @@ package com.samski.safenotes;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -54,6 +60,8 @@ public class MainActivityAfterLogin extends AppCompatActivity {
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        setNavBarDrawable(this);
 
         handler = new DataHandler(MainActivityAfterLogin.this, DataHandler.USER_ITEMS_DATA_SHAREDPREF_KEY, DataHandler.ITEM_ARRAYLIST_TYPE);
 
@@ -284,6 +292,22 @@ public class MainActivityAfterLogin extends AppCompatActivity {
         }
 
         return searchResults;
+    }
+
+    @TargetApi(Build.VERSION_CODES.R)
+    public static void setNavBarDrawable(Activity activity) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+
+            Window window = activity.getWindow();
+            Drawable gradientDrawable = ResourcesCompat.getDrawable(activity.getResources(),
+                    R.drawable.app_background, activity.getTheme());
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(activity.getResources().getColor(android.R.color.transparent,
+                    activity.getTheme()));
+            window.setBackgroundDrawable(gradientDrawable);
+        }
+
     }
 
 }

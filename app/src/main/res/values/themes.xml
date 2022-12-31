@@ -87,7 +87,7 @@
         <item name="colorSecondaryVariant">#808080</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+
         <item name="android:textColor">@color/black</item>
         <item name="android:textColorHint">@color/themeDarkVariant1</item>
         <item name="cardBackgroundColor">@color/white</item>

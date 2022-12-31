@@ -58,7 +58,9 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/normalScreen">
+        android:id="@+id/normalScreen"
+        android:background="@drawable/app_background"
+        >
 
         <!--    search bar-->
         <androidx.cardview.widget.CardView
